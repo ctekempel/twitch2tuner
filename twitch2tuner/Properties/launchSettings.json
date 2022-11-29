@@ -4,7 +4,15 @@
       "commandName": "Project"
     },
     "Docker": {
-      "commandName": "Docker"
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/epg.xml",
+      "environmentVariables": {
+        "CLIENT_ID": "ww80ldocxiqd8i6l2bvozd7oz8u947",
+        "CLIENT_SECRET": "ewa786t6hkzci651z0jyldtdy0kl1a",
+        "TWITCH_USERNAME": "SirCh1cken"
+      },
+      "DockerfileRunArguments": "-p 22708:22708"
     }
   }
 }
