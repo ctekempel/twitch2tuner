@@ -115,7 +115,7 @@ namespace twitch2tuner
                         ProfileImageUrl = followedUser.ProfileImageUrl,
                     };
 
-                    var schedule = await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Schedule.GetChannelStreamScheduleAsync(followedUser.Id, first:5));
+                    var schedule = await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Schedule.GetChannelStreamScheduleAsync(followedUser.Id, first:5), ignoreBadResourceException: true);
 
                     if(schedule != null && schedule.Schedule!=null)
                     {

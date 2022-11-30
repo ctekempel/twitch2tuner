@@ -28,7 +28,7 @@ namespace twitch2tuner
         /// Whether or not this method is allowed to attempt to get a new access token if the current one is empty or expired.
         /// Set this to false when invoking this method recursively.
         /// </param>
-        public static async Task<T> UseTwitchApi<T>(Func<TwitchAPI, Task<T>> action, bool tryRefreshToken = true)
+        public static async Task<T> UseTwitchApi<T>(Func<TwitchAPI, Task<T>> action, bool tryRefreshToken = true, bool ignoreBadResourceException = false)
         {
             if (string.IsNullOrEmpty(TwitchApi.Settings.AccessToken) && tryRefreshToken)
             {
@@ -44,6 +44,11 @@ namespace twitch2tuner
             }
             catch (Exception ex)
             {
+                if(ignoreBadResourceException && ex is BadResourceException)
+                {
+                    return default;
+                }
+
                 $"Encountered an error invoking the Twitch API: {ex}".Log(nameof(TwitchApiManager), LogLevel.Error);
 
                 if ((ex is BadScopeException || ex is ClientIdAndOAuthTokenRequired) && tryRefreshToken)
