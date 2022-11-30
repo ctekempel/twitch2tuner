@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
@@ -10,7 +10,7 @@
     <PackageReference Include="EmbedIO" Version="3.4.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
-    <PackageReference Include="TwitchLib.Api" Version="3.2.2" />
+    <PackageReference Include="TwitchLib.Api" Version="3.8.0" />
   </ItemGroup>
 
 </Project>

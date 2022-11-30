@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using EmbedIO;
 using Swan.Logging;
 using twitch2tuner.EPG;
+using twitch2tuner.Extensions;
 
 namespace twitch2tuner
 {
@@ -17,6 +18,8 @@ namespace twitch2tuner
     /// </summary>
     public class Tuner
     {
+
+        private const int EstimateForStreamDurationInHours = 3; 
         /// <summary>
         /// Simulates an HDHomeRun tuner object.
         /// </summary>
@@ -92,16 +95,31 @@ namespace twitch2tuner
 
                 if (channel.IsLive)
                 {
-
                     tv.Programmes.Add(new Programme
                     {
                         Channel = channel.DisplayName,
-                        Start = (channel.LiveStreamStartedDateTime ?? DateTime.Now.Subtract(TimeSpan.FromHours(1))).ToString("yyyyMMddHHmmss zzz"),
-                        Stop = DateTime.Now.Add(TimeSpan.FromHours(24)).ToString("yyyyMMddHHmmss zzz"),
+                        Start = (channel.LiveStreamStartedDateTime ?? DateTime.Now.Subtract(TimeSpan.FromHours(1))).ToDateString(),
+                        Stop = DateTime.Now.Add(TimeSpan.FromHours(EstimateForStreamDurationInHours)).ToDateString(),
                         Title = string.Format(liveTitle, channel.DisplayName, channel.LiveGameName),
                         Description = channel.LiveStreamTitle,
                         Icon = new Icon { Source = channel.LiveGameArtUrl }
                     });
+                }
+
+                if (channel.Schedule != null)
+                {
+                    foreach (var scheduleSegment in channel.Schedule.Segments)
+                    {
+                        tv.Programmes.Add(new Programme
+                        {
+                            Channel = channel.DisplayName,
+                            Start = scheduleSegment.StartTime.ToDateString(),
+                            Stop = ((scheduleSegment.EndTime >scheduleSegment.StartTime) ? scheduleSegment.EndTime: scheduleSegment.StartTime.AddHours(EstimateForStreamDurationInHours)).ToDateString(),
+                            Title = scheduleSegment.Title,
+                            Description = scheduleSegment.Title,
+                            Icon = new Icon { Source = channel.LiveGameArtUrl }
+                        });
+                    }
                 }
             }
 

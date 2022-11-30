@@ -1,4 +1,6 @@
 ﻿using System;
+using TwitchLib.Api.Helix.Models.Schedule;
+using TwitchLib.Api.Helix.Models.Schedule.GetChannelStreamSchedule;
 
 namespace twitch2tuner
 {
@@ -59,5 +61,6 @@ namespace twitch2tuner
         /// The profile image for the channel
         /// </summary>
         public string ProfileImageUrl { get; set; }
+        public ChannelStreamSchedule Schedule { get; internal set; }
     }
 }

@@ -112,8 +112,15 @@ namespace twitch2tuner
                     {
                         DisplayName = followedUser.DisplayName,
                         ChannelNumber = followedUser.Id,
-                        ProfileImageUrl = followedUser.ProfileImageUrl
+                        ProfileImageUrl = followedUser.ProfileImageUrl,
                     };
+
+                    var schedule = await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Schedule.GetChannelStreamScheduleAsync(followedUser.Id, first:5));
+
+                    if(schedule != null && schedule.Schedule!=null)
+                    {
+                        channel.Schedule = schedule.Schedule;
+                    }
 
                     channels.Add(channel);
                 }
