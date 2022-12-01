@@ -51,7 +51,7 @@ namespace twitch2tuner
         public static async Task UpdateLiveStatus(Channel channel)
         {
             // See if the user is streaming
-            Stream stream = (await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Streams.GetStreamsAsync(userIds: new List<string> {channel.ChannelNumber})))?.Streams.FirstOrDefault();
+            Stream stream = (await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Streams.GetStreamsAsync(userIds: new List<string> { channel.ChannelNumber })))?.Streams.FirstOrDefault();
 
             channel.IsLive = stream is { };
             channel.LiveStreamId = stream?.Id;
@@ -63,7 +63,7 @@ namespace twitch2tuner
             // If the user is streaming, get the game art
             if (stream is { })
             {
-                var game = (await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Games.GetGamesAsync(new List<string> {stream.GameId})))?.Games.FirstOrDefault();
+                var game = (await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Games.GetGamesAsync(new List<string> { stream.GameId })))?.Games.FirstOrDefault();
                 channel.LiveGameArtUrl = game?.BoxArtUrl.Replace("{width}", "272").Replace("{height}", "380");
             }
         }
@@ -94,7 +94,7 @@ namespace twitch2tuner
                     page = response.Pagination.Cursor;
                 }
             } while (string.IsNullOrEmpty(page) == false);
-            
+
 
             $"Found that user {twitchUser.DisplayName} follows {userFollows.Count} channels: {string.Join(", ", userFollows.Select(x => x.ToUserName))}".Log(nameof(RetrieveChannels), LogLevel.Info);
 
@@ -115,9 +115,9 @@ namespace twitch2tuner
                         ProfileImageUrl = followedUser.ProfileImageUrl,
                     };
 
-                    var schedule = await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Schedule.GetChannelStreamScheduleAsync(followedUser.Id, first:5));
+                    var schedule = await TwitchApiManager.UseTwitchApi(twitchApi => twitchApi.Helix.Schedule.GetChannelStreamScheduleAsync(followedUser.Id, first: 5), ignoreBadResourceException: true);
 
-                    if(schedule != null && schedule.Schedule!=null)
+                    if (schedule != null && schedule.Schedule != null)
                     {
                         channel.Schedule = schedule.Schedule;
                     }
