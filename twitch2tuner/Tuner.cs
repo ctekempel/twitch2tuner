@@ -106,7 +106,7 @@ namespace twitch2tuner
                     });
                 }
 
-                if (channel.Schedule != null)
+                if (channel.Schedule != null && channel.Schedule.Segments != null)
                 {
                     foreach (var scheduleSegment in channel.Schedule.Segments)
                     {

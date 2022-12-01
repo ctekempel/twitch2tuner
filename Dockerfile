@@ -18,11 +18,21 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update 
+
   # Install pip so that we can use pip to install youtube-dl and streamlink at runtime
-  python3-pip \
+RUN apt-get install -y python3-pip
+
   # youtube-dl needs ffmpeg, but it can't be installed with pip
-  ffmpeg \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y ffmpeg
+
+RUN pip3 install --upgrade youtube-dl
+
+RUN pip3 install --upgrade streamlink
+ 
+# clenaup
+RUN rm -rf /var/lib/apt/lists/*
+
+EXPOSE 22708
 
 ENTRYPOINT ["dotnet", "twitch2tuner.dll"]
